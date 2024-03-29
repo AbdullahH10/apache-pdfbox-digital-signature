@@ -43,21 +43,21 @@ public class Signature implements SignatureInterface {
                     new JcaSimpleSignerInfoGeneratorBuilder()
                             .setProvider("BC")
                             .build("SHA256withRSA", privateKey, certificate);
-            CMSSignedDataGenerator gen = new CMSSignedDataGenerator();
+            CMSSignedDataGenerator signedDataGenerator = new CMSSignedDataGenerator();
 
-            gen.addSignerInfoGenerator(signerInfoGenerator);
+            signedDataGenerator.addSignerInfoGenerator(signerInfoGenerator);
 
             Store<X509CertificateHolder> certs =
                     new CollectionStore<X509CertificateHolder>(
                             Collections.singletonList(certificate));
 
-            gen.addCertificates(certs);
+            signedDataGenerator.addCertificates(certs);
 
-            byte[] msg = new byte[content.available()];
-            msg = content.readAllBytes();
-            CMSTypedData typedMsg = new CMSProcessableByteArray(msg);
+            byte[] data = new byte[content.available()];
+            data = content.readAllBytes();
+            CMSTypedData typedData = new CMSProcessableByteArray(data);
 
-            CMSSignedData signedData = gen.generate(typedMsg, false);
+            CMSSignedData signedData = signedDataGenerator.generate(typedData);
 
             return signedData.getEncoded();
         }

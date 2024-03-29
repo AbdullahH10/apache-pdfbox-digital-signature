@@ -71,10 +71,8 @@ public class SignPDF {
 
     public static void main(String[] args) {
         try {
-//            File inputFile = new File("/mnt/Fast Storage/Projects/apache-pdfbox-digital-signature/src/main/resources/test/sample.pdf");
-            File inputFile = new File("/mnt/Fast Storage/Projects/apache-pdfbox-digital-signature/src/main/resources/test/test_drawing.pdf");
-//            File inputFile = new File("/mnt/Fast Storage/Projects/apache-pdfbox-digital-signature/src/main/resources/signed/test.pdf");
-            File outputFile = new File("/mnt/Fast Storage/Projects/apache-pdfbox-digital-signature/src/main/resources/signed/test2.pdf");
+            File inputFile = new File("/mnt/Fast Storage/Projects/apache-pdfbox-digital-signature/src/main/resources/test/sample.pdf");
+            File outputFile = new File("/mnt/Fast Storage/Projects/apache-pdfbox-digital-signature/src/main/resources/signed/test.pdf");
 
             // Load the keystore
             FileInputStream pkcs12Stream = new FileInputStream("/mnt/Fast Storage/Projects/apache-pdfbox-digital-signature/src/main/resources/test/test.pfx");
