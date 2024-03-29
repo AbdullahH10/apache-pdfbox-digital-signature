@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.security.KeyStore;
 import java.util.Calendar;
 
 public class SignPDF {
@@ -37,6 +36,7 @@ public class SignPDF {
         pdSignature.setName("Your Name");
         pdSignature.setLocation("Your Location");
         pdSignature.setReason("Your Reason for Signing");
+        pdSignature.setContactInfo("Contact information");
         pdSignature.setSignDate(Calendar.getInstance());
 
         // Optional: Add visual signature
@@ -45,14 +45,14 @@ public class SignPDF {
                 new FileInputStream("/mnt/Fast Storage/Projects/apache-pdfbox-digital-signature/src/main/resources/test/test.png"),
                 1
         );
-        visibleSignDesigner.xAxis(30f)
-                .yAxis(0f)
+        visibleSignDesigner.coordinates(0f,0f)
                 .height(25f)
                 .width(25f)
                 .adjustForRotation()
-                .signatureFieldName("signature");
+                .signatureFieldName("Digital Signature");
 
         PDVisibleSigProperties visibleSigProperties = new PDVisibleSigProperties();
+        visibleSigProperties.signerName("John Doe");
         visibleSigProperties.setPdVisibleSignature(visibleSignDesigner);
         visibleSigProperties.buildSignature();
 
@@ -67,33 +67,6 @@ public class SignPDF {
         doc.saveIncremental(fos);
         doc.close();
         fos.close();
-    }
-
-    public static void main(String[] args) {
-        try {
-            File inputFile = new File("/mnt/Fast Storage/Projects/apache-pdfbox-digital-signature/src/main/resources/test/sample.pdf");
-            File outputFile = new File("/mnt/Fast Storage/Projects/apache-pdfbox-digital-signature/src/main/resources/signed/test.pdf");
-
-            // Load the keystore
-            FileInputStream pkcs12Stream = new FileInputStream("/mnt/Fast Storage/Projects/apache-pdfbox-digital-signature/src/main/resources/test/test.pfx");
-            KeyStore keystore = KeyStore.getInstance("PKCS12");
-            char[] password = "12345".toCharArray();
-            keystore.load(pkcs12Stream, password);
-            pkcs12Stream.close();
-
-            //create a Signature class instance which implements SignatureInterface
-            Signature signature = new Signature(keystore,password);
-
-            // Set signature options
-            SignatureOptions signatureOptions = new SignatureOptions();
-            signatureOptions.setPreferredSignatureSize(SignatureOptions.DEFAULT_SIGNATURE_SIZE);
-
-            SignPDF signPdf = new SignPDF(signature);
-            signPdf.sign(inputFile, outputFile, signatureOptions);
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
     }
 }
 
