@@ -12,11 +12,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
 
-public class SignPDF {
+public class PDFSigner {
 
     private final Signature signature;
 
-    public SignPDF(Signature signature) throws Exception {
+    public PDFSigner(Signature signature) throws Exception {
         this.signature = signature;
     }
 
@@ -52,7 +52,6 @@ public class SignPDF {
                 .signatureFieldName("Digital Signature");
 
         PDVisibleSigProperties visibleSigProperties = new PDVisibleSigProperties();
-        visibleSigProperties.signerName("John Doe");
         visibleSigProperties.setPdVisibleSignature(visibleSignDesigner);
         visibleSigProperties.buildSignature();
 

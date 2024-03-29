@@ -26,7 +26,7 @@ public class Main {
             SignatureOptions signatureOptions = new SignatureOptions();
             signatureOptions.setPreferredSignatureSize(SignatureOptions.DEFAULT_SIGNATURE_SIZE);
 
-            SignPDF signPdf = new SignPDF(signature);
+            PDFSigner signPdf = new PDFSigner(signature);
             signPdf.sign(inputFile, outputFile, signatureOptions);
 
         } catch (Exception e) {
