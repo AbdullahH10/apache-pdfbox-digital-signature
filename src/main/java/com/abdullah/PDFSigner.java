@@ -1,5 +1,7 @@
 package com.abdullah;
 
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.io.RandomAccessReadBufferedFile;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.interactive.digitalsignature.PDSignature;
 import org.apache.pdfbox.pdmodel.interactive.digitalsignature.SignatureOptions;
@@ -25,9 +27,9 @@ public class PDFSigner {
             throw new IOException("Document for signing does not exist");
         }
 
-        FileInputStream fis = new FileInputStream(inputFile);
-        PDDocument doc = PDDocument.load(fis);
-        fis.close();
+        PDDocument doc = Loader.loadPDF(
+                new RandomAccessReadBufferedFile(inputFile)
+        );
 
         // Create signature dictionary
         PDSignature pdSignature = new PDSignature();
@@ -45,7 +47,8 @@ public class PDFSigner {
                 new FileInputStream("src/main/resources/test/test.png"),
                 1
         );
-        visibleSignDesigner.coordinates(0f,0f)
+        visibleSignDesigner.xAxis(0f)
+                .yAxis(visibleSignDesigner.getPageHeight()-25f)
                 .height(25f)
                 .width(25f)
                 .adjustForRotation()
