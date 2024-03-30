@@ -3,15 +3,16 @@ package com.abdullah;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.io.RandomAccessReadBufferedFile;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.interactive.digitalsignature.PDSignature;
 import org.apache.pdfbox.pdmodel.interactive.digitalsignature.SignatureOptions;
 import org.apache.pdfbox.pdmodel.interactive.digitalsignature.visible.PDVisibleSigProperties;
 import org.apache.pdfbox.pdmodel.interactive.digitalsignature.visible.PDVisibleSignDesigner;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.awt.*;
+import java.awt.geom.Rectangle2D;
+import java.io.*;
 import java.util.Calendar;
 
 public class PDFSigner {
@@ -30,6 +31,7 @@ public class PDFSigner {
         PDDocument doc = Loader.loadPDF(
                 new RandomAccessReadBufferedFile(inputFile)
         );
+        PDPage refPage = doc.getPage(0);
 
         // Create signature dictionary
         PDSignature pdSignature = new PDSignature();
@@ -42,23 +44,19 @@ public class PDFSigner {
         pdSignature.setSignDate(Calendar.getInstance());
 
         // Optional: Add visual signature
-        PDVisibleSignDesigner visibleSignDesigner = new PDVisibleSignDesigner(
+        File sigImage = new File("src/main/resources/test/test.png");
+        SignatureAppearance signatureAppearance = new SignatureAppearance();
+        Rectangle sigRect = new Rectangle(0,(int)(refPage.getMediaBox().getHeight()-72),144,72);
+        PDRectangle sigPDRect = signatureAppearance.adjustRectangleForRotation(doc,sigRect);
+        InputStream visualSignStream = signatureAppearance.getVisualSignatureAsStream(
                 doc,
-                new FileInputStream("src/main/resources/test/test.png"),
+                sigPDRect,
+                pdSignature,
+                sigImage,
                 1
         );
-        visibleSignDesigner.xAxis(0f)
-                .yAxis(visibleSignDesigner.getPageHeight()-25f)
-                .height(25f)
-                .width(25f)
-                .adjustForRotation()
-                .signatureFieldName("Digital Signature");
 
-        PDVisibleSigProperties visibleSigProperties = new PDVisibleSigProperties();
-        visibleSigProperties.setPdVisibleSignature(visibleSignDesigner);
-        visibleSigProperties.buildSignature();
-
-        signatureOptions.setVisualSignature(visibleSigProperties);
+        signatureOptions.setVisualSignature(visualSignStream);
         signatureOptions.setPage(0);
 
         // Add signature field to the document
