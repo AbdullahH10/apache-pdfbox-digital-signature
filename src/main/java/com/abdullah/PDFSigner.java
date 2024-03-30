@@ -42,7 +42,7 @@ public class PDFSigner {
         // Optional: Add visual signature
         PDVisibleSignDesigner visibleSignDesigner = new PDVisibleSignDesigner(
                 doc,
-                new FileInputStream("/mnt/Fast Storage/Projects/apache-pdfbox-digital-signature/src/main/resources/test/test.png"),
+                new FileInputStream("src/main/resources/test/test.png"),
                 1
         );
         visibleSignDesigner.coordinates(0f,0f)

@@ -9,11 +9,11 @@ import java.security.KeyStore;
 public class Main {
     public static void main(String[] args) {
         try {
-            File inputFile = new File("/mnt/Fast Storage/Projects/apache-pdfbox-digital-signature/src/main/resources/test/sample.pdf");
-            File outputFile = new File("/mnt/Fast Storage/Projects/apache-pdfbox-digital-signature/src/main/resources/signed/test.pdf");
+            File inputFile = new File("src/main/resources/test/sample.pdf");
+            File outputFile = new File("src/main/resources/signed/test.pdf");
 
             // Load the keystore
-            FileInputStream pkcs12Stream = new FileInputStream("/mnt/Fast Storage/Projects/apache-pdfbox-digital-signature/src/main/resources/test/test.pfx");
+            FileInputStream pkcs12Stream = new FileInputStream("src/main/resources/test/test.pfx");
             KeyStore keystore = KeyStore.getInstance("PKCS12");
             char[] password = "12345".toCharArray();
             keystore.load(pkcs12Stream, password);
